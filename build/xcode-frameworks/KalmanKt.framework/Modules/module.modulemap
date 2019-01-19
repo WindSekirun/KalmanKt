@@ -1,0 +1,6 @@
+framework module KalmanKt {
+    umbrella header "KalmanKt.h"
+
+    export *
+    module * { export * }
+}
