@@ -5,8 +5,8 @@
       <configuration version="3" platform="Native " useProjectSettings="false" isTestModule="true" externalProjectId="KalmanKt">
         <sourceSets>
           <sourceSet>com.github.WindSekirun.KalmanKt.iosMain</sourceSet>
-          <sourceSet>com.github.WindSekirun.KalmanKt.commonMain</sourceSet>
           <sourceSet>com.github.WindSekirun.KalmanKt.commonTest</sourceSet>
+          <sourceSet>com.github.WindSekirun.KalmanKt.commonMain</sourceSet>
         </sourceSets>
         <newMppModelJpsModuleKind>COMPILATION_AND_SOURCE_SET_HOLDER</newMppModelJpsModuleKind>
         <compilerSettings />

@@ -1,5 +1,6 @@
 package com.github.windsekirun.kalmankt.processor
 
+import com.github.windsekirun.kalmankt.KalmanConstants
 import com.github.windsekirun.kalmankt.ext.toRadians
 import com.github.windsekirun.kalmankt.filter.GeoHashFilter
 import com.github.windsekirun.kalmankt.filter.KalmanFilter
@@ -30,10 +31,10 @@ class KalmanProcessor {
         var noise: Double
 
         position = locationKt.getLatitude()
-        noise = accuracy * METER_TO_DEG
+        noise = accuracy * KalmanConstants.METER_TO_DEG
 
         if (latitudeTracker == null) {
-            latitudeTracker = KalmanFilter(TIME_STEP, COORDINATE_NOISE)
+            latitudeTracker = KalmanFilter(KalmanConstants.TIME_STEP, KalmanConstants.COORDINATE_NOISE)
             latitudeTracker?.reset(position, 0.0, noise)
         }
 
@@ -41,10 +42,10 @@ class KalmanProcessor {
         latitudeTracker?.update(position, noise)
 
         position = locationKt.getLongitude()
-        noise = accuracy * cos(locationKt.getLatitude().toRadians()) * METER_TO_DEG
+        noise = accuracy * cos(locationKt.getLatitude().toRadians()) * KalmanConstants.METER_TO_DEG
 
         if (longitudeTracker == null) {
-            longitudeTracker = KalmanFilter(TIME_STEP, COORDINATE_NOISE)
+            longitudeTracker = KalmanFilter(KalmanConstants.TIME_STEP, KalmanConstants.COORDINATE_NOISE)
             longitudeTracker?.reset(position, 0.0, noise)
         }
 
@@ -56,7 +57,7 @@ class KalmanProcessor {
             noise = accuracy
 
             if (altitudeTracker == null) {
-                altitudeTracker = KalmanFilter(TIME_STEP, ALTITUDE_NOISE)
+                altitudeTracker = KalmanFilter(KalmanConstants.TIME_STEP, KalmanConstants.ALTITUDE_NOISE)
                 altitudeTracker?.reset(position, 0.0, noise)
             }
 
@@ -93,8 +94,8 @@ class KalmanProcessor {
             }
 
             setAccuracy(
-                (latitudeTracker?.getAccuracy() ?: 0.0 * DEG_TO_METER) +
-                        (longitudeTracker?.getAccuracy() ?: 0.0 * DEG_TO_METER)
+                (latitudeTracker?.getAccuracy() ?: 0.0 * KalmanConstants.DEG_TO_METER) +
+                        (longitudeTracker?.getAccuracy() ?: 0.0 * KalmanConstants.DEG_TO_METER)
             )
             setTimestamp(lastLocation?.getTimestamp() ?: 0)
         }
@@ -105,12 +106,4 @@ class KalmanProcessor {
     }
 
     fun getFilteredList() = geoHashFilter.getFilteredTrack()
-
-    companion object {
-        const val DEG_TO_METER = 111225.0
-        const val METER_TO_DEG = 1.0 / DEG_TO_METER
-        const val TIME_STEP = 1.0
-        const val COORDINATE_NOISE = 4.0 * METER_TO_DEG
-        const val ALTITUDE_NOISE = 10.0
-    }
 }
