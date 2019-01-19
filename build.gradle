@@ -13,7 +13,7 @@ kotlin {
     targets {
         fromPreset(presets.jvm, 'jvm')
         // iosX64(sim) , iosArm64(phone)
-        fromPreset(presets.iosArm64, 'ios') {
+        fromPreset(presets.iosX64, 'ios') {
             compilations.main.outputKinds('FRAMEWORK')
         }
     }
