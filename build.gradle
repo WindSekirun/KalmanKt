@@ -1,0 +1,117 @@
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven { url 'https://plugins.gradle.org/m2/' }
+        maven { url 'https://dl.bintray.com/jetbrains/kotlin-native-dependencies' }
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-native-gradle-plugin:1.3.11"
+    }
+
+}
+
+plugins {
+    id 'kotlin-multiplatform' version '1.3.11'
+}
+repositories {
+    mavenCentral()
+}
+group 'com.github.WindSekirun'
+version '0.0.1'
+
+apply plugin: 'maven-publish'
+apply plugin: 'konan'
+
+kotlin {
+    targets {
+        fromPreset(presets.jvm, 'jvm')
+        // This preset is for iPhone emulator
+        // Switch here to presets.iosArm64 to build library for iPhone device
+        // iosX64, iosArm64
+        fromPreset(presets.iosX64, 'ios') {
+            compilations.main.outputKinds('FRAMEWORK')
+        }
+    }
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
+                implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.1.0'
+            }
+        }
+        commonTest {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-test-common'
+                implementation 'org.jetbrains.kotlin:kotlin-test-annotations-common'
+            }
+        }
+        jvmMain {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-stdlib'
+                implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.0'
+            }
+        }
+        jvmTest {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-test'
+                implementation 'org.jetbrains.kotlin:kotlin-test-junit'
+            }
+        }
+        iosMain {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-stdlib-native'
+                implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core-native:1.1.0'
+            }
+        }
+        iosTest {
+        }
+    }
+}
+
+konanArtifacts {
+
+    framework('KalmanKt', targets: ['iphone_sim']) {
+
+        // Enable multiplatform support for this artifact.
+        enableMultiplatform true
+
+        // Enable compiler optimizations (true/false).
+        enableOptimizations true
+
+        // Enable debugging for binaries generated (true/false).
+        enableDebug true
+
+        // Print all parameters during the build.
+        dumpParameters false
+
+        // Print time of compilation phases (equivalent of the `--time` command line option).
+        measureTime false
+    }
+
+}
+
+configurations {
+    compileClasspath
+}
+
+task packForXCode(type: Sync) {
+    final File frameworkDir = new File(buildDir, "xcode-frameworks")
+    final String mode = project.findProperty("XCODE_CONFIGURATION")?.toUpperCase() ?: 'DEBUG'
+
+    inputs.property "mode", mode
+    dependsOn kotlin.targets.ios.compilations.main.linkTaskName("FRAMEWORK", mode)
+
+    from { kotlin.targets.ios.compilations.main.getBinary("FRAMEWORK", mode).parentFile }
+    into frameworkDir
+
+    doLast {
+        new File(frameworkDir, 'gradlew').with {
+            text = "#!/bin/bash\nexport 'JAVA_HOME=${System.getProperty("java.home")}'\ncd '${rootProject.rootDir}'\n./gradlew \$@\n"
+            setExecutable(true)
+        }
+    }
+}
+
+tasks.build.dependsOn packForXCode
