@@ -1,5 +1,5 @@
 # KalmanKt
-Kotlin Shared Library for Android, IOS that provides **implementations for Kalman filters and geohash filters**
+Kotlin Shared Library for Android, IOS that provides **implementations for Kalman filters and geohash filters** for increase accuracy of Geolocations 
 
 ** NOT TESTED **
 
