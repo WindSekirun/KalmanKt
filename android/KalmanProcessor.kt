@@ -1,3 +1,4 @@
+import android.location.Location
 import android.os.Handler
 import com.github.windsekirun.kalmankt.KalmanConstants
 import com.github.windsekirun.kalmankt.ext.toRadians
@@ -123,4 +124,18 @@ class KalmanProcessor {
     }
 
     fun getFilteredList() = geoHashFilter.getFilteredTrack()
+    
+    companion object {
+        fun Location.toLocationKt(): LocationKt {
+            return LocationKt().apply {
+                setLatitude(this@toLocationKt.latitude)
+                setLongitude(this@toLocationKt.longitude)
+                setAccuracy(this@toLocationKt.accuracy.toDouble())
+                setAltitude(this@toLocationKt.altitude)
+                setBearing(this@toLocationKt.bearing.toDouble())
+                setSpeed(this@toLocationKt.speed.toDouble())
+                setTimestamp(this@toLocationKt.time)
+            }
+        }
+    }
 }
