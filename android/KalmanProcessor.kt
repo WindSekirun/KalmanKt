@@ -33,6 +33,10 @@ class KalmanProcessor {
         lastLocation = null
         geoHashFilter.reset(precision, minPointCount)
     }
+    
+    fun process(location: Location) {
+        process(toLocationKt(location))
+    }
 
     fun process(locationKt: LocationKt) {
         val accuracy = locationKt.getAccuracy()
@@ -124,17 +128,17 @@ class KalmanProcessor {
     }
 
     fun getFilteredList() = geoHashFilter.getFilteredTrack()
-    
+
     companion object {
-        fun Location.toLocationKt(): LocationKt {
+        fun toLocationKt(data: Location): LocationKt {
             return LocationKt().apply {
-                setLatitude(this@toLocationKt.latitude)
-                setLongitude(this@toLocationKt.longitude)
-                setAccuracy(this@toLocationKt.accuracy.toDouble())
-                setAltitude(this@toLocationKt.altitude)
-                setBearing(this@toLocationKt.bearing.toDouble())
-                setSpeed(this@toLocationKt.speed.toDouble())
-                setTimestamp(this@toLocationKt.time)
+                setLatitude(data.latitude)
+                setLongitude(data.longitude)
+                setAccuracy(data.accuracy.toDouble())
+                setAltitude(data.altitude)
+                setBearing(datat.bearing.toDouble())
+                setSpeed(data.speed.toDouble())
+                setTimestamp(data.time)
             }
         }
     }
