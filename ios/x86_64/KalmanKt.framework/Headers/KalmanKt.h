@@ -176,13 +176,13 @@ __attribute__((swift_name("GeoHashFilter.Companion")))
 __attribute__((objc_subclassing_restricted))
 __attribute__((swift_name("KalmanFilter")))
 @interface KalmanKtKalmanFilter : KotlinBase
-- (instancetype)initWithTimeStep:(double)timeStep processNoise:(double)processNoise __attribute__((swift_name("init(timeStep:processNoise:)"))) __attribute__((objc_designated_initializer));
+- (instancetype)initWithMt:(double)mt processNoise:(double)processNoise __attribute__((swift_name("init(mt:processNoise:)"))) __attribute__((objc_designated_initializer));
 - (void)resetPosition:(double)position velocity:(double)velocity noise:(double)noise __attribute__((swift_name("reset(position:velocity:noise:)")));
 - (void)updatePosition:(double)position noise:(double)noise __attribute__((swift_name("update(position:noise:)")));
 - (void)predictAcceleration:(double)acceleration __attribute__((swift_name("predict(acceleration:)")));
-- (double)getPosition __attribute__((swift_name("getPosition()")));
-- (double)getVelocity __attribute__((swift_name("getVelocity()")));
-- (double)getAccuracy __attribute__((swift_name("getAccuracy()")));
+@property (readonly) double position;
+@property (readonly) double velocity;
+@property (readonly) double accuracy;
 @end;
 
 __attribute__((objc_subclassing_restricted))

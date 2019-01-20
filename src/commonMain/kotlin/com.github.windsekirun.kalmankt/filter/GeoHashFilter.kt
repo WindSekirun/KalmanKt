@@ -1,6 +1,7 @@
 package com.github.windsekirun.kalmankt.filter
 
 import com.github.windsekirun.kalmankt.ext.Coordinates
+import com.github.windsekirun.kalmankt.ext.GeoHash
 import com.github.windsekirun.kalmankt.model.GeoPoint
 import com.github.windsekirun.kalmankt.model.LocationKt
 
