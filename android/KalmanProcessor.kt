@@ -136,7 +136,7 @@ class KalmanProcessor {
                 setLongitude(data.longitude)
                 setAccuracy(data.accuracy.toDouble())
                 setAltitude(data.altitude)
-                setBearing(datat.bearing.toDouble())
+                setBearing(data.bearing.toDouble())
                 setSpeed(data.speed.toDouble())
                 setTimestamp(data.time)
             }
